@@ -80,7 +80,6 @@ func (m *Monitor) SetDuration(duration []float64) {
 
 func (m *Monitor) SetMetricPrefix(prefix string) {
 	metricRequestTotal = prefix + metricRequestTotal
-	metricRequestUVTotal = prefix + metricRequestUVTotal
 	metricURIRequestTotal = prefix + metricURIRequestTotal
 	metricRequestBody = prefix + metricRequestBody
 	metricResponseBody = prefix + metricResponseBody
@@ -90,7 +89,6 @@ func (m *Monitor) SetMetricPrefix(prefix string) {
 
 func (m *Monitor) SetMetricSuffix(suffix string) {
 	metricRequestTotal += suffix
-	metricRequestUVTotal += suffix
 	metricURIRequestTotal += suffix
 	metricRequestBody += suffix
 	metricResponseBody += suffix
@@ -108,12 +106,15 @@ func (m *Monitor) AddMetric(metric *Metric) error {
 		return errors.Errorf("metric name cannot be empty.")
 	}
 	if f, ok := promTypeHandler[metric.Type]; ok {
-		if err := f(metric); err == nil {
-			prometheus.MustRegister(metric.vec)
-			m.metrics[metric.Name] = metric
-			return nil
+		if err := f(metric); err != nil {
+			return err
 		}
+
+		prometheus.MustRegister(metric.vec)
+		m.metrics[metric.Name] = metric
+		return nil
 	}
+
 	return errors.Errorf("metric type '%d' not existed.", metric.Type)
 }
 
@@ -148,7 +149,7 @@ func summaryHandler(metric *Metric) error {
 	if len(metric.Objectives) == 0 {
 		return errors.Errorf("metric '%s' is summary type, cannot lose objectives param.", metric.Name)
 	}
-	prometheus.NewSummaryVec(
+	metric.vec = prometheus.NewSummaryVec(
 		prometheus.SummaryOpts{Name: metric.Name, Help: metric.Description, Objectives: metric.Objectives},
 		metric.Labels,
 	)

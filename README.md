@@ -1,8 +1,6 @@
 # gin-metrics
 gin-gonic/gin metrics exporter for Prometheus.
 
-[中文](README_zh.md)
-
 - [Introduction](#Introduction)
 - [Grafana](#Grafana)
 - [Installation](#Installation)
@@ -165,9 +163,4 @@ func main() {
 	_ = appRouter.Run(":8080")
 }
 ```
-
-## Contributing
-
-If someone has a problem or suggestions, you can submit [new issues](https://github.com/penglongli/gin-metrics/issues/new) 
-or [new pull requests](https://github.com/penglongli/gin-metrics/pulls). 
 
