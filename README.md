@@ -37,7 +37,7 @@ Set the `grafana` directory for details.
 ## Installation
 
 ```bash
-$ go get github.com/penglongli/gin-metrics
+$ go get github.com/ShragaUser/gin-metrics
 ```
 
 ## Usage
@@ -50,7 +50,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 
-	"github.com/penglongli/gin-metrics/ginmetrics"
+	"github.com/ShragaUser/gin-metrics/ginmetrics"
 )
 
 func main() {
